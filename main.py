@@ -11,7 +11,7 @@ st.set_page_config(
 st.title('Dashboard de Finanzas Personales')
 
 #Dataframe
-df = pd.read_excel('BBDBancos.xlsx', sheet_name='BBDD')
+df = pd.read_excel('data\BBDBancos.xlsx', sheet_name='BBDD')
 
 
 # Filtramos por mes y año
@@ -159,3 +159,14 @@ with col_banco:
     
     chart_banco = (bars_banco + text_banco_pos + text_banco_neg).properties(height=350).configure_axis(grid=False)
     st.altair_chart(chart_banco, use_container_width=True)
+    st.write('### Histórico Anual Ingresos/Gastos por Banco')
+
+for año in df['Año'].drop_duplicates().sort_values():
+    df_año = df[df['Año'] == año]
+    st.write(f"Histórico Anual Ingresos/Gastos por Banco - {año}")
+    st.line_chart(
+    df_año,
+    x="Mes",
+    y="Importe (€)",    
+    color="Cuenta"
+    )
